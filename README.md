@@ -8,7 +8,7 @@
 > 3. Переместите файлы из скаченной папки `Actions` в папку `Actions` репозитория вашего бота. (который вы только что открыли)
 > 4. Перезапустите Discord Bot Maker и наслаждайтесь.
 # Полезные ссылки
-* [Русскоее сообщество Discord Bot Maker в Discord](https://discord.gg/SPAa5YchXQ).
+* [Русское сообщество Discord Bot Maker в Discord](https://discord.gg/SPAa5YchXQ).
 * [Geometry Space в Discord](https://discord.gg/kmza9YD).
 
 #### Отслеживать любые изменения можно [тут](https://github.com/lolmak/LeagueData/commits/master).
