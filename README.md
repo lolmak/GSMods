@@ -3,7 +3,7 @@
 
 **Geometry Space Mods** - это пак модов для [**Discord Bot Maker**](https://store.steampowered.com/app/682130/Discord_Bot_Maker/).
 # Установка
-> 1. [Cкачать архив с модами GS](https://github.com/lolmak/GSMods/archive/refs/heads/main.zip).
+> 1. [**Cкачать архив с модами GS**](https://github.com/lolmak/GSMods/archive/refs/heads/main.zip).
 > 2. В верхнем меню Discord Bot Maker, кликните Project → Open Project Directory.
 > 3. Переместите файлы из скаченной папки `Actions` в папку `Actions` репозитория вашего бота. (который вы только что открыли)
 > 4. Перезапустите Discord Bot Maker и наслаждайтесь.
