@@ -5,8 +5,9 @@ module.exports = {
     version: '2.1.6',
     preciseCheck: false,
     author: 'lolmak',
+	designer: 'LIK (Данил)',
     authorUrl: 'https://discord.gg/kmza9YD',
-    downloadURL: null,
+    downloadURL: 'https://github.com/lolmak/GSMods/blob/main/actions/reply_to_message_MOD.js',
   },
   subtitle(data, presets) {
     if(data.descriptionx == true){
@@ -25,7 +26,7 @@ module.exports = {
     if (type !== varType) return;
     return [data.varName3, "Сообщение"];
   },
-  fields: ['storage', 'varName', 'storage2', 'varName2', 'storage3', 'varName3', 'descriptioncolor', 'description', 'descriptionx'],
+  fields: ['storage', 'varName', 'storage2', 'varName2', 'storage3', 'varName3', 'descriptioncolor', 'description', 'descriptionx', 'notification'],
 
   html(_isEvent, data) {
     return `
@@ -45,7 +46,13 @@ module.exports = {
     <br><br><br>
     <message-input dropdownLabel="Message option" selectId="storage2" variableContainerId="varNameContainer2" variableInputId="varName2"></message-input>
     <br><br><br>
+
+    <span class="dbminputlabel">Доп настройки</span><br><div style="padding:10px;background:rgba(0,0,0,0.2)">
+      <dbm-checkbox id="notification" label="Уведомление" checked></dbm-checkbox>
+      </div><br></div>
+
     <store-in-variable allowNone dropdownLabel="Store In" selectId="storage3" variableContainerId="varNameContainer3" variableInputId="varName3"></store-in-variable>
+
   </tab>
 
   <tab label="Помощь" icon="help">
@@ -90,23 +97,41 @@ module.exports = {
 	const data = cache.actions[cache.index];
 	const message = await this.getMessageFromData(data.storage, data.varName, cache);
 	const messageToReply = await this.getMessageFromData(data.storage2, data.varName2, cache);
-	const onComplete = (resultMsg) => {
-	};
-	message.reply(messageToReply)
-	.then( resultMsg => {
-		const varName3 = this.evalMessage(data.varName3, cache);
-		const storage3 = parseInt(data.storage3, 10);
-		if (storage3 == 0) {
+	if (data.notification) {
+		message.reply(messageToReply)
+		.then( resultMsg => {
+			const varName3 = this.evalMessage(data.varName3, cache);
+			const storage3 = parseInt(data.storage3, 10);
+			if (storage3 == 0) {
+				this.callNextAction(cache);
+			} else {
+				this.storeValue(resultMsg, storage3, varName3, cache)
+				this.callNextAction(cache);
+			}
+		})
+		.catch( err => {
+			console.error('Ошибка в действии Reply To Message:\n' + err);
 			this.callNextAction(cache);
-		} else {
-			this.storeValue(resultMsg, storage3, varName3, cache)
+		});
+	} else {
+		const notificationObj = { allowedMentions: { repliedUser: false }};
+		const messageToReplyWN = Object.assign(messageToReply, notificationObj);
+		message.reply(messageToReplyWN)
+		.then( resultMsg => {
+			const varName3 = this.evalMessage(data.varName3, cache);
+			const storage3 = parseInt(data.storage3, 10);
+			if (storage3 == 0) {
+				this.callNextAction(cache);
+			} else {
+				this.storeValue(resultMsg, storage3, varName3, cache)
+				this.callNextAction(cache);
+			}
+		})
+		.catch( err => {
+			console.error('Ошибка в действии Reply To Message:\n' + err);
 			this.callNextAction(cache);
-		}
-	})
-	.catch( err => {
-	console.error('Ошибка в действии Reply To Message:\n' + err);
-	this.callNextAction(cache);
-	});
+		});
+	}
   },
   mod() {},
 };

@@ -11,4 +11,4 @@
 * [Русское сообщество Discord Bot Maker в Discord](https://discord.gg/SPAa5YchXQ).
 * [Geometry Space в Discord](https://discord.gg/kmza9YD).
 
-#### Отслеживать любые изменения можно [тут](https://github.com/lolmak/GSMods/commits/main).
+Отслеживать любые изменения можно [тут](https://github.com/lolmak/GSMods/commits/main).

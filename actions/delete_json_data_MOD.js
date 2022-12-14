@@ -5,8 +5,9 @@ module.exports = {
     version: '2.1.6',
     preciseCheck: false,
     author: 'lolmak',
+	designer: 'LIK (Данил)',
     authorUrl: 'https://discord.gg/kmza9YD',
-    downloadURL: null,
+    downloadURL: 'https://github.com/lolmak/GSMods/blob/main/actions/delete_json_data_MOD.js',
   },
   subtitle(data, presets) {
     if(data.descriptionx == true){
