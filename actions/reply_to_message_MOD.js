@@ -5,7 +5,7 @@ module.exports = {
     version: '2.1.6',
     preciseCheck: false,
     author: 'lolmak',
-	designer: 'LIK (Данил)',
+    designer: 'LIK (Данил)',
     authorUrl: 'https://discord.gg/kmza9YD',
     downloadURL: 'https://github.com/lolmak/GSMods/blob/main/actions/reply_to_message_MOD.js',
   },
@@ -26,7 +26,7 @@ module.exports = {
     if (type !== varType) return;
     return [data.varName3, "Сообщение"];
   },
-  fields: ['storage', 'varName', 'storage2', 'varName2', 'storage3', 'varName3', 'descriptioncolor', 'description', 'descriptionx', 'notification'],
+  fields: ['storage', 'varName', 'storage2', 'varName2', 'storage3', 'varName3', 'descriptioncolor', 'description', 'descriptionx', 'notification', 'iffalse', 'iffalseVal'],
 
   html(_isEvent, data) {
     return `
@@ -47,11 +47,31 @@ module.exports = {
     <message-input dropdownLabel="Message option" selectId="storage2" variableContainerId="varNameContainer2" variableInputId="varName2"></message-input>
     <br><br><br>
 
-    <span class="dbminputlabel">Доп настройки</span><br><div style="padding:10px;background:rgba(0,0,0,0.2)">
-      <dbm-checkbox id="notification" label="Уведомление" checked></dbm-checkbox>
-      </div><br></div>
-
     <store-in-variable allowNone dropdownLabel="Store In" selectId="storage3" variableContainerId="varNameContainer3" variableInputId="varName3"></store-in-variable>
+
+  </tab>
+
+  <tab label="Доп настройки" icon="external alternate">
+  <span class="dbminputlabel">Опции</span><br><div style="padding:10px;background:rgba(0,0,0,0.2)">
+  <dbm-checkbox id="notification" label="Уведомление" checked></dbm-checkbox>
+  </div><br></div>
+
+  <div style="float: left; width: 50%">
+  <span class="dbminputlabel">Если не удалось ответить</span>
+  <select id="iffalse" class="round" onchange="glob.onComparisonChanged(this)">
+      <option value="0" selecionado>Продолжать действия</option>
+      <option value="1">Остановить последовательность действий</option>
+      <option value="2">Перейти к действию</option>
+      <option value="3">Пропустить следующие действия</option>
+      <option value="4">Перейти к якорю</option>
+  </select>
+</div>
+
+<div id="iffalseContainer" style="display: none; float: right; width: 45%;">
+  <span id="xinelas" class="dbminputlabel">Для</span>
+  <br>
+  <input id="iffalseVal" class="round" name="actionxinxyla" type="text">
+</div>
 
   </tab>
 
@@ -91,6 +111,28 @@ module.exports = {
 		  });
 		}
 	  }
+
+    glob.onComparisonChanged = function (event) {
+      if (event.value > "1") {
+        document.getElementById("iffalseContainer").style.display = null;
+      } else {
+        document.getElementById("iffalseContainer").style.display = "none";
+      }
+
+      if (event.value == "2") {
+        document.querySelector("[id='xinelas']").innerText = (`Номер действия`);
+      }
+
+      if (event.value == "3") {
+        document.querySelector("[id='xinelas']").innerText = (`Пропустить действий`);
+      }
+
+      if (event.value == "4") {
+        document.querySelector("[id='xinelas']").innerText = (`Якоря название`);
+      }
+    }
+
+    glob.onComparisonChanged(document.getElementById("iffalse"));
   },
 
   async action(cache) {
@@ -111,7 +153,33 @@ module.exports = {
 		})
 		.catch( err => {
 			console.error('Ошибка в действии Reply To Message:\n' + err);
-			this.callNextAction(cache);
+			const iffalse = parseInt(this.evalMessage(data.iffalse, cache), 10);
+			switch (iffalse) {
+				case 0:
+					console.log('Да, я тут');
+					this.callNextAction(cache);
+					break;
+				case 1:
+					break;
+				case 2:
+					const val = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
+					const index = Math.max(val - 1, 0);
+					if (cache.actions[index]) {
+						cache.index = index - 1;
+						this.callNextAction(cache);
+					}
+					break;
+				case 3:
+					const amnt = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
+					const index2 = cache.index + amnt + 1;
+					if (cache.actions[index2]) {
+						cache.index = index2 - 1;
+						this.callNextAction(cache);
+					}
+				case 4:
+					const anchorName = this.evalMessage(data.iffalseVal, cache);
+					cache.goToAnchor(anchorName);
+			}
 		});
 	} else {
 		const notificationObj = { allowedMentions: { repliedUser: false }};
@@ -129,7 +197,33 @@ module.exports = {
 		})
 		.catch( err => {
 			console.error('Ошибка в действии Reply To Message:\n' + err);
-			this.callNextAction(cache);
+			const iffalse = parseInt(this.evalMessage(data.iffalse, cache), 10);
+			switch (iffalse) {
+				case 0:
+					console.log('Да, я тут');
+					this.callNextAction(cache);
+					break;
+				case 1:
+					break;
+				case 2:
+					const val = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
+					const index = Math.max(val - 1, 0);
+					if (cache.actions[index]) {
+						cache.index = index - 1;
+						this.callNextAction(cache);
+					}
+					break;
+				case 3:
+					const amnt = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
+					const index2 = cache.index + amnt + 1;
+					if (cache.actions[index2]) {
+						cache.index = index2 - 1;
+						this.callNextAction(cache);
+					}
+				case 4:
+					const anchorName = this.evalMessage(data.iffalseVal, cache);
+					cache.goToAnchor(anchorName);
+			}
 		});
 	}
   },
