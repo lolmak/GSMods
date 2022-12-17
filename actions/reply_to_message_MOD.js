@@ -156,7 +156,6 @@ module.exports = {
 			const iffalse = parseInt(this.evalMessage(data.iffalse, cache), 10);
 			switch (iffalse) {
 				case 0:
-					console.log('Да, я тут');
 					this.callNextAction(cache);
 					break;
 				case 1:
@@ -200,7 +199,6 @@ module.exports = {
 			const iffalse = parseInt(this.evalMessage(data.iffalse, cache), 10);
 			switch (iffalse) {
 				case 0:
-					console.log('Да, я тут');
 					this.callNextAction(cache);
 					break;
 				case 1:
