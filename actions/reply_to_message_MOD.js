@@ -139,90 +139,58 @@ module.exports = {
 	const data = cache.actions[cache.index];
 	const message = await this.getMessageFromData(data.storage, data.varName, cache);
 	const messageToReply = await this.getMessageFromData(data.storage2, data.varName2, cache);
-	if (data.notification) {
-		message.reply(messageToReply)
-		.then( resultMsg => {
-			const varName3 = this.evalMessage(data.varName3, cache);
-			const storage3 = parseInt(data.storage3, 10);
-			if (storage3 == 0) {
-				this.callNextAction(cache);
-			} else {
-				this.storeValue(resultMsg, storage3, varName3, cache)
-				this.callNextAction(cache);
-			}
-		})
-		.catch( err => {
-			console.error('Ошибка в действии Reply To Message:\n' + err);
-			const iffalse = parseInt(this.evalMessage(data.iffalse, cache), 10);
-			switch (iffalse) {
+	var _this = this;
+	function ifFlse(ifflseVal) {
+	switch (ifflseVal) {
 				case 0:
-					this.callNextAction(cache);
+					_this.callNextAction(cache);
 					break;
 				case 1:
 					break;
 				case 2:
-					const val = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
+					const val = parseInt(_this.evalMessage(data.iffalseVal, cache), 10);
 					const index = Math.max(val - 1, 0);
 					if (cache.actions[index]) {
 						cache.index = index - 1;
-						this.callNextAction(cache);
+						_this.callNextAction(cache);
 					}
 					break;
 				case 3:
-					const amnt = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
+					const amnt = parseInt(_this.evalMessage(data.iffalseVal, cache), 10);
 					const index2 = cache.index + amnt + 1;
 					if (cache.actions[index2]) {
 						cache.index = index2 - 1;
-						this.callNextAction(cache);
+						_this.callNextAction(cache);
 					}
 				case 4:
-					const anchorName = this.evalMessage(data.iffalseVal, cache);
+					const anchorName = _this.evalMessage(data.iffalseVal, cache);
 					cache.goToAnchor(anchorName);
 			}
-		});
+	}
+	let messageToReplyWN = null;
+	if (data.notification) {
+		messageToReplyWN = messageToReply;
 	} else {
 		const notificationObj = { allowedMentions: { repliedUser: false }};
-		const messageToReplyWN = Object.assign(messageToReply, notificationObj);
+		messageToReplyWN = Object.assign(messageToReply, notificationObj);
+	}
+	try {
 		message.reply(messageToReplyWN)
 		.then( resultMsg => {
-			const varName3 = this.evalMessage(data.varName3, cache);
-			const storage3 = parseInt(data.storage3, 10);
-			if (storage3 == 0) {
+			if (parseInt(data.storage3, 10) == 0) {
 				this.callNextAction(cache);
 			} else {
-				this.storeValue(resultMsg, storage3, varName3, cache)
+				this.storeValue(resultMsg, parseInt(data.storage3, 10), this.evalMessage(data.varName3, cache), cache)
 				this.callNextAction(cache);
 			}
 		})
 		.catch( err => {
 			console.error('Ошибка в действии Reply To Message:\n' + err);
-			const iffalse = parseInt(this.evalMessage(data.iffalse, cache), 10);
-			switch (iffalse) {
-				case 0:
-					this.callNextAction(cache);
-					break;
-				case 1:
-					break;
-				case 2:
-					const val = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
-					const index = Math.max(val - 1, 0);
-					if (cache.actions[index]) {
-						cache.index = index - 1;
-						this.callNextAction(cache);
-					}
-					break;
-				case 3:
-					const amnt = parseInt(this.evalMessage(data.iffalseVal, cache), 10);
-					const index2 = cache.index + amnt + 1;
-					if (cache.actions[index2]) {
-						cache.index = index2 - 1;
-						this.callNextAction(cache);
-					}
-				case 4:
-					const anchorName = this.evalMessage(data.iffalseVal, cache);
-					cache.goToAnchor(anchorName);
-			}
+			ifFlse(parseInt(this.evalMessage(data.iffalse, cache), 10));
 		});
+	} catch (err) {
+		console.error('Ошибка в действии Reply To Message:\n' + err);
+		ifFlse(parseInt(this.evalMessage(data.iffalse, cache), 10));
 	}
   },
   mod() {},
