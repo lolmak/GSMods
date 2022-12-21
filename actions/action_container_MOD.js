@@ -19,7 +19,7 @@ module.exports = {
     author: 'LIK (Данил)',
 	designer: 'LIK (Данил)',
     authorUrl: 'https://discord.gg/kmza9YD',
-    downloadURL: 'https://github.com/lolmak/GSMods/blob/main/actions/delete_json_data_MOD.js',},
+    downloadURL: 'https://github.com/lolmak/GSMods/blob/main/actions/action_container_MOD.js',},
 
   fields: ['comment', 'actions', 'descriptioncolor', 'description', 'descriptionx'],
 
