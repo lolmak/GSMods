@@ -35,7 +35,7 @@ module.exports = {
 </tr></table>
 </div>
 
-<action-list-input id="actions" height="calc(100vh - 300px)"></action-list-input>
+<action-list-input id="actions" height="calc(100vh - 270px)"></action-list-input>
 
 <style>
 
