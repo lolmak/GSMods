@@ -128,7 +128,7 @@ module.exports = {
       }
 
       if (event.value == "4") {
-        document.querySelector("[id='xinelas']").innerText = (`Якоря название`);
+        document.querySelector("[id='xinelas']").innerText = (`Название якоря`);
       }
     }
 
