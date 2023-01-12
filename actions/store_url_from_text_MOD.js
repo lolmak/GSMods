@@ -62,9 +62,9 @@ module.exports = {
 <span style="color:Khaki">.</span></tl><br>
 <center>
 <tlt><b>Необходимые модули</b></tlt>
-<tl><span style="color:Khaki">Для работы текущего действия необходим модуль </i>"get-url-title".</i></span><br>
+<tl><span style="color:Khaki">Для работы текущего действия необходим модуль </i>"node-fetch".</i></span><br>
 <span style="color:Khaki">Усатновить его можно, прописав данную команду в консоль:</span><br>
-<mark>npm install get-url-title@2.0.0</mark><br></tl><br>
+<mark>npm install node-fetch@3.3.0</mark><br></tl><br>
 </tab>
 
 </tab-system>
@@ -104,7 +104,7 @@ mark{background-color:rgba(50,50,50,0.7);border-radius: 8px 8px 8px 8px;border: 
   },
   
   async action(cache) {
-	  const getUrlTitle = require("get-url-title");
+	  const fetch = require('node-fetch');
 	  const data = cache.actions[cache.index];
 	  let sourceText = this.evalMessage(data.text, cache);
 	  let urls = (sourceText.replaceAll('\\', '')).match(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi);
@@ -140,15 +140,20 @@ mark{background-color:rgba(50,50,50,0.7);border-radius: 8px 8px 8px 8px;border: 
 	  if (urls == null) {
 		  this.storeValue(undefined, parseInt(data.storage, 10), this.evalMessage(data.varName, cache), cache)
 		  ifFlse(parseInt(this.evalMessage(data.iffalse, cache), 10));
-	  } else {
-		  for (var i = 0; i < urls.length; i++) {
-			  await getUrlTitle('https://' + urls[i])
-			  .then(urlTitle => checkedUrls.push('https://' + urls[i]))
-			  .catch(err => {})
+	  } else try {
+		  for (const url of urls) {
+			  await fetch('https://' + url)
+			  .then(urlData => checkedUrls.push('https://' + url))
+			  .catch(err => {});
+		  };
+		  if (checkedUrls == '') {
+			  this.storeValue(undefined, parseInt(data.storage, 10), this.evalMessage(data.varName, cache), cache);
+			  ifFlse(parseInt(this.evalMessage(data.iffalse, cache), 10));
+		  } else {
+			  this.storeValue(checkedUrls, parseInt(data.storage, 10), this.evalMessage(data.varName, cache), cache)
+			  this.callNextAction(cache);
 		  }
-		  this.storeValue(checkedUrls, parseInt(data.storage, 10), this.evalMessage(data.varName, cache), cache)
-		  this.callNextAction(cache);
-	  }
+	  }catch(e){}
   },
   mod() {},
 };
