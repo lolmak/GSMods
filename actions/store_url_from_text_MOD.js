@@ -22,7 +22,7 @@ module.exports = {
 
   html(_isEvent, data) {
     return `
-	<div class="dbmmodsbr1 xinelaslink" data-url="https://discord.gg/SPAa5YchXQ">DBM CIS</div>
+	<div class="dbmmodsbr1 xinelaslink" data-url="https://discord.gg/kmza9YD">GSteam</div>
     <div class="dbmmodsbr2 xinelaslink" data-url="https://discord.gg/ztBb9CuVhj">By lolmak</div>
 
 <tab-system>
